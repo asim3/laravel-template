@@ -6,4 +6,6 @@ USER d_user
 
 WORKDIR /home/d_user
 
-RUN composer create-project laravel/laravel laravel-project
+ENTRYPOINT [ "/bin/sh", "-c" ]
+
+CMD [ "composer create-project laravel/laravel laravel-project" ]
