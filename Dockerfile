@@ -4,8 +4,8 @@ RUN adduser -S -s /bin/bash -u 1000 -D d_user
 
 USER d_user
 
-WORKDIR /home/d_user
+WORKDIR /home/d_user/laravel-project
 
 ENTRYPOINT [ "/bin/sh", "-c" ]
 
-CMD [ "cd /home/d_user/laravel-project && php artisan serve" ]
+CMD [ "php artisan serve --host=0.0.0.0" ]

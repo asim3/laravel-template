@@ -5,6 +5,6 @@ services:
     build:
       context: .
     ports:
-      - "3000:3000"
+      - "8000:8000"
     volumes:
       - "./laravel-project:/home/d_user/laravel-project"
