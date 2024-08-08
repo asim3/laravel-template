@@ -8,4 +8,4 @@ WORKDIR /home/d_user/laravel-project
 
 ENTRYPOINT [ "/bin/sh", "-c" ]
 
-CMD [ "php artisan serve --host=0.0.0.0" ]
+CMD [ "php artisan serve --host=0.0.0.0 --port=8000" ]
