@@ -1,9 +1,76 @@
 version: "3.8"
 
 services:
+  db-mysql:
+    image: mysql:lts-oraclelinux9
+    environment:
+      TZ: Asia/Riyadh
+      MYSQL_DATABASE: main-laravel
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin
+      MYSQL_ROOT_PASSWORD: root
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin --password=root  status"]
+      start_period: 10s
+      interval: 30s
+      timeout: 3s
+      retries: 1
+
+  setup-laravel: 
+    image: composer:2.7.7
+    user: "1000:1000"
+    restart: on-failure
+    entrypoint:
+      - "/bin/sh"
+      - "-c"
+      - "cd /laravel-src \
+          && composer install \
+          && if [ ! -f .env ]; then \
+              cp .env.example .env && php artisan key:generate --ansi; \
+             fi; \
+        "
+    volumes:
+      - "./src:/laravel-src"
+
+  migrate-laravel: 
+    build:
+      context: .
+    restart: on-failure
+    depends_on:
+      setup-laravel:
+        condition: service_completed_successfully
+      db-mysql:
+        condition: service_healthy
+    environment:
+      TZ: Asia/Riyadh
+      DB_CONNECTION: mysql
+      DB_HOST: db-mysql
+      DB_DATABASE: main-laravel
+      DB_USERNAME: admin
+      DB_PASSWORD: admin
+    entrypoint:
+      - "/bin/sh"
+      - "-c"
+      - "cd /laravel-src \
+          && php artisan vendor:publish --tag=laravel-assets --ansi --force \
+          && php artisan migrate:refresh --seed \
+        "
+    volumes:
+      - "./src:/laravel-src"
+
   app:
     build:
       context: .
+    depends_on:
+      migrate-laravel:
+        condition: service_completed_successfully
+    environment:
+      TZ: Asia/Riyadh
+      DB_CONNECTION: mysql
+      DB_HOST: db-mysql
+      DB_DATABASE: main-laravel
+      DB_USERNAME: admin
+      DB_PASSWORD: admin
     ports:
       - "8000:8000"
     volumes:
