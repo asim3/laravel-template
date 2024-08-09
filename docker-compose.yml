@@ -38,7 +38,7 @@ services:
       - "-c"
       - "cd /laravel-src \
           && php artisan vendor:publish --tag=laravel-assets --ansi --force \
-          && php artisan migrate --ansi \
+          && php artisan migrate:refresh --seed \
         "
     volumes:
       - "./src:/laravel-src"
