@@ -1,9 +1,61 @@
 version: "3.8"
 
 services:
+  setup-laravel: 
+    image: composer:2.7.7
+    user: "1000:1000"
+    restart: on-failure
+    entrypoint:
+      - "/bin/sh"
+      - "-c"
+      - "cd /laravel-src \
+          && composer install \
+          && if [ ! -f .env ]; then \
+              cp .env.example .env && php artisan key:generate --ansi; \
+             fi; \
+        "
+    volumes:
+      - "./src:/laravel-src"
+
+  migrate-laravel: 
+    image: composer:2.7.7
+    user: "1000:1000"
+    restart: on-failure
+    depends_on:
+      setup-laravel:
+        condition: service_completed_successfully
+    environment:
+      TZ: Asia/Riyadh
+      # DB_CONNECTION: mysql
+      # DB_HOST: 127.0.0.1
+      # DB_PORT: 3306
+      # DB_DATABASE: laravel
+      # DB_USERNAME: root
+      # DB_PASSWORD: root
+    entrypoint:
+      - "/bin/sh"
+      - "-c"
+      - "cd /laravel-src \
+          && php artisan vendor:publish --tag=laravel-assets --ansi --force \
+          && php artisan migrate --graceful --ansi \
+        "
+    volumes:
+      - "./src:/laravel-src"
+
   app:
     build:
       context: .
+    depends_on:
+      migrate-laravel:
+        condition: service_completed_successfully
+    environment:
+      TZ: Asia/Riyadh
+      # DB_CONNECTION: mysql
+      # DB_HOST: 127.0.0.1
+      # DB_PORT: 3306
+      # DB_DATABASE: laravel
+      # DB_USERNAME: root
+      # DB_PASSWORD: root
     ports:
       - "8000:8000"
     volumes:
