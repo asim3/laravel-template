@@ -4,7 +4,7 @@ RUN adduser -S -s /bin/bash -u 1000 -D d_user
 
 USER d_user
 
-WORKDIR /home/d_user/laravel-project
+WORKDIR /home/d_user/laravel-src
 
 ENTRYPOINT [ "/bin/sh", "-c" ]
 

@@ -16,3 +16,12 @@ docker compose up --build --force-recreate
 # EXEC
 docker compose exec app /bin/bash 
 ```
+
+
+## delete
+```bash
+php artisan package:discover --ansi
+php artisan vendor:publish --tag=laravel-assets --ansi --force
+php artisan key:generate --ansi
+php artisan migrate --graceful --ansi
+```
