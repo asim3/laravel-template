@@ -71,7 +71,7 @@ services:
       MYSQL_ROOT_PASSWORD: root
     healthcheck:
       test: ["CMD-SHELL", "mysqladmin --password=root  status"]
-      interval: 10s
-      retries: 5
-      start_period: 30s # Probe failure during this period will not be counted
-      timeout: 10s
+      start_period: 10s # Probe failure during this period will not be counted
+      interval: 30s # waiting periods between each command
+      timeout: 3s # health check command timeout
+      retries: 1
