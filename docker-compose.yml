@@ -25,7 +25,7 @@ services:
       setup-laravel:
         condition: service_completed_successfully
       db-mysql:
-        condition: service_started
+        condition: service_healthy
     environment:
       TZ: Asia/Riyadh
       DB_CONNECTION: mysql
@@ -64,7 +64,14 @@ services:
   db-mysql:
     image: mysql
     environment:
+      TZ: Asia/Riyadh
       MYSQL_DATABASE: main-laravel
       MYSQL_USER: admin
       MYSQL_PASSWORD: admin
       MYSQL_ROOT_PASSWORD: root
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin --password=root  status"]
+      interval: 10s
+      retries: 5
+      start_period: 30s # Probe failure during this period will not be counted
+      timeout: 10s
