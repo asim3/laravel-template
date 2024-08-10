@@ -17,10 +17,10 @@ jobs:
         run: docker image build -t init/create-laravel-project:latest init
 
       - name: Debug 1
-        run: ls -al ./ && ls -al ./.github/workflows && id -g
+        run: ls -al ./ && ls -al ./.github/workflows && id -u && id -g
 
       - name: Run create laravel project
-        run: docker run --rm -u $(id -g):$(id -g) -v '.:/repo' init/create-laravel-project:latest
+        run: docker run --rm -u $(id -u):$(id -g) -v '.:/repo' init/create-laravel-project:latest
 
 
       - name: Debug
