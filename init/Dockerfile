@@ -8,4 +8,7 @@ WORKDIR /home/d_user
 
 ENTRYPOINT [ "/bin/sh", "-c" ]
 
-CMD [ "composer create-project laravel/laravel src mv ./init/testing.yml ./.github/workflows/testing.yml && rm -rf ./init" ]
+CMD [ "composer create-project laravel/laravel src \
+       && mv ./init/testing.yml ./.github/workflows/testing.yml \
+       && rm -rf ./init" \
+    ]
