@@ -1,0 +1,23 @@
+name: Testing
+
+on:
+  push:
+    branches:
+      - main
+      - dockerfile
+
+jobs:
+  docker_test:
+    runs-on: ubuntu-latest
+    name: Test on Docker
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Docker Image
+        run: docker image build -t init/create-laravel-project:latest init
+
+      - name: Run create laravel project
+        run: docker run --rm -it -v '.:/home/d_user' init/create-laravel-project:latest
+
+      - name: Debug
+        run: ls -al ./ && ls -al ./.github/workflows && ls -al ./src
