@@ -1,0 +1,16 @@
+FROM serversideup/php:8.2-cli-bookworm AS build
+
+COPY --chown=www-data:www-data --chmod=750 ./src /repo/src
+
+WORKDIR /repo/src
+
+RUN composer install
+
+
+# https://serversideup.net/open-source/docker-php/docs/getting-started/installation
+
+FROM serversideup/php:8.2-fpm-nginx-alpine AS main
+
+COPY --from=build --chown=www-data:www-data --chmod=750 /repo/src /var/www/html
+
+ENV PHP_OPCACHE_ENABLE=1
