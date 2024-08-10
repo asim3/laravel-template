@@ -1,6 +1,14 @@
 # Laravel Template
 [code coverage](https://medium.com/@anowarhossain/code-coverage-report-in-laravel-and-make-100-coverage-of-your-code-ce27cccbc738)
 
+
+[fly.io](https://fly.io/docs/about/pricing/)
+
+https://serversideup.net/open-source/docker-php/
+
+https://hub.docker.com/u/serversideup
+
+
 ## Create Laravel Project
 ```bash
 docker image build -t init/create-laravel-project:latest ./init
