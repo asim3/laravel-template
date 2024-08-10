@@ -2,7 +2,7 @@ FROM composer:2.7.7
 
 RUN docker-php-ext-install pdo_mysql
 
-RUN apt-get install php-xdebug
+RUN apk add php8-pecl-xdebug
 
 RUN adduser -S -s /bin/bash -u 1000 -D d_user
 
