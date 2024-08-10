@@ -17,7 +17,7 @@ jobs:
         run: docker image build -t init/create-laravel-project:latest init
 
       - name: Run create laravel project
-        run: docker run --rm -it -v '.:/home/d_user' init/create-laravel-project:latest
+        run: docker run --rm -v '.:/home/d_user' init/create-laravel-project:latest
 
       - name: Debug
         run: ls -al ./ && ls -al ./.github/workflows && ls -al ./src
