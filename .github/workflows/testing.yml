@@ -24,14 +24,20 @@ jobs:
           -t ${PROJECT_IMAGE_NAME}:tests
           -f ./deploy/Dockerfile . ;
 
+      - name: Generate new app key
+        run: >
+          docker container run --rm
+          ${PROJECT_IMAGE_NAME}:tests
+          'php artisan key:generate'
+
       - name: Run All Tests
         run: >
           docker container run --rm
           ${PROJECT_IMAGE_NAME}:tests
-          'php artisan key:generate && php artisan test'
+          'php artisan test'
 
       - name: Assert test coverage is 90%
         run: >
           docker container run --rm
           ${PROJECT_IMAGE_NAME}:tests
-          'php artisan key:generate && php artisan test --coverage --min=90'
+          'php artisan test --coverage --min=90'

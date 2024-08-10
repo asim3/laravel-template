@@ -2,6 +2,8 @@ FROM composer:2.7.7
 
 RUN docker-php-ext-install pdo_mysql
 
+RUN apt-get install php-xdebug
+
 RUN adduser -S -s /bin/bash -u 1000 -D d_user
 
 ENV APP_HOME=/home/d_user/laravel-src
