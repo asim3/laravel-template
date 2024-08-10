@@ -3,9 +3,9 @@
 
 ## Create Laravel Project
 ```bash
-docker image build -t init/create-laravel-project:latest init
+docker image build -t init/create-laravel-project:latest ./init
 
-docker run --rm -it -v '.:/home/d_user' init/create-laravel-project:latest
+docker run --rm -u 1000:1000 -it -v '.:/repo' init/create-laravel-project:latest
 ```
 
 
