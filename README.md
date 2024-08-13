@@ -14,5 +14,9 @@ docker run --rm -u 1000:1000 -it -v '.:/repo' init/create-laravel-project:latest
 docker compose up --build --force-recreate
 
 # EXEC
-docker compose exec app /bin/bash 
+docker compose run -i app /bin/bash
+
+docker compose run -i app 'php artisan migrate'
+
+docker compose run -i app 'php artisan test'
 ```
