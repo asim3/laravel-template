@@ -18,35 +18,12 @@ services:
     volumes:
       - db_data:/var/lib/mysql
 
-  setup-laravel: 
-    image: composer:2.7.7
-    user: "1000:1000"
-    restart: on-failure
-    entrypoint:
-      - "/bin/sh"
-      - "-c"
-      - "cd /laravel-src \
-          && composer install \
-          && if [ ! -f .env ]; then \
-              cp .env.example .env && php artisan key:generate --ansi; \
-              sed -i -e 's/DB_CONNECTION=sqlite/DB_CONNECTION=mysql/'  ./.env; \
-              sed -i -e 's/# DB_HOST=127.0.0.1/DB_HOST=db-mysql/'      ./.env; \
-              sed -i -e 's/# DB_PORT=3306/DB_PORT=3306/'               ./.env; \
-              sed -i -e 's/# DB_DATABASE=laravel/DB_DATABASE=laravel/' ./.env; \
-              sed -i -e 's/# DB_USERNAME=root/DB_USERNAME=admin/'      ./.env; \
-              sed -i -e 's/# DB_PASSWORD=/DB_PASSWORD=admin/'          ./.env; \
-             fi; \
-        "
-    volumes:
-      - "./src:/laravel-src"
 
   migrate-laravel: 
     build:
       context: .
     restart: on-failure
     depends_on:
-      setup-laravel:
-        condition: service_completed_successfully
       db-mysql:
         condition: service_healthy
     environment:
@@ -54,12 +31,8 @@ services:
     entrypoint:
       - "/bin/sh"
       - "-c"
-      - "cd /laravel-src \
-          && php artisan vendor:publish --tag=laravel-assets --ansi --force \
-          && php artisan migrate \
-        "
-    volumes:
-      - "./src:/laravel-src"
+      - "php artisan migrate --force"
+
 
   app:
     build:
@@ -71,8 +44,7 @@ services:
       TZ: Asia/Riyadh
     ports:
       - "8000:8000"
-    volumes:
-      - "./src:/home/d_user/laravel-src"
+
 
   adminer:
     image: adminer:4-standalone
